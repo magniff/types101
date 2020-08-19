@@ -11,7 +11,7 @@ classifiers = [
 
 setuptools.setup(
     name="types101",
-    description="A stupid monadic fields tracker.",
+    description="Bidirectional type checker for simply typed lambda calculus.",
     version="0.2.6",
     license="MIT license",
     platforms=["unix", "linux", "osx", "win32"],
