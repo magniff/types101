@@ -5,11 +5,11 @@ from .exceptions import TypingError101
 
 
 def lookup_var(context: contexts.Context, variable: terms.Variable) -> types.Type:
-    for context_cell in context:
-        if variable.varname == context_cell.variable.varname:
-            return context_cell.ttype
+    lookup_result = context.get(variable)
+    if lookup_result is not None:
+        return lookup_result
     else:
-        raise TypingError101("Haha, no!")
+        raise TypingError101()
 
 
 def check(context: contexts.Context, term: terms.Term, ttype: types.Type) -> bool:
@@ -23,7 +23,7 @@ def check(context: contexts.Context, term: terms.Term, ttype: types.Type) -> boo
         if not isinstance(ttype, types.B):
             return False
         return check(
-            context=context.fork_with(
+            context=context.forkwith(
                 ContextCell(variable=term.var, ttype=ttype.left)
             ),
             term=term.inner,

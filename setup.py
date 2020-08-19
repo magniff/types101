@@ -5,7 +5,7 @@ classifiers = [
     (
         "Programming Language :: Python :: %s" % x
     )
-    for x in "3.1 3.2 3.3 3.4 3.5 3.6 3.7".split()
+    for x in "3.7".split()
 ]
 
 
@@ -20,6 +20,9 @@ setuptools.setup(
     classifiers=classifiers,
     packages=[
         "types101",
+    ],
+    install_requires=[
+        "funcparserlib"
     ],
     zip_safe=False,
 )

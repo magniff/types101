@@ -1,6 +1,10 @@
+from __future__ import annotations
 from copy import deepcopy
+
+
 from . import types
 from . import terms
+from ..exceptions import ContextCorruption
 
 
 class ContextCell:
@@ -9,17 +13,15 @@ class ContextCell:
         self.ttype = ttype
 
 
-class Context(list):
-    def fork_with(self, item: ContextCell) -> 'Context':
+class Context(dict):
+    def forkwith(self, item: ContextCell) -> Context:
+        context_response = self.get(item.variable)
+        if context_response is not None and context_response != item.ttype:
+            raise ContextCorruption()
         new_context = deepcopy(self)
-        new_context.append(item)
+        new_context[item.variable] = item.ttype
         return new_context
 
 
 def cnil() -> Context:
     return Context()
-
-
-def cappend(item: ContextCell, context: Context) -> Context:
-    context.append(item)
-    return context
