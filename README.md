@@ -6,8 +6,8 @@ Also, have a look on the Dave's STLC [tutorial](http://www.davidchristiansen.dk/
 ## R-{True,False}
 Typing relation for the boolean literals is an axiom, so we can `infere` it:
 
-<img src="https://render.githubusercontent.com/render/math?math=\Large \frac {} {\textbf{\Gamma} \vdash true \Rightarrow Boolean}">
-<img src="https://render.githubusercontent.com/render/math?math=\Large \frac {} {\textbf{\Gamma} \vdash false \Rightarrow Boolean}">
+<img src="https://render.githubusercontent.com/render/math?math=\Large \frac {\emptyset} {\textbf{\Gamma} \vdash true \Rightarrow Boolean}">
+<img src="https://render.githubusercontent.com/render/math?math=\Large \frac {\emptyset} {\textbf{\Gamma} \vdash false \Rightarrow Boolean}">
 
 ## R-Var
 We are only allowed to get the type of a plain variable from the typing context, no guessing here
