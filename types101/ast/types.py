@@ -12,7 +12,7 @@ class Type:
         return self.as_tuple() == other.as_tuple()
 
 
-class Z(Type, Enum):
+class Simple(Type, Enum):
     Boolean = 0
 
     def __repr__(self):
@@ -22,7 +22,7 @@ class Z(Type, Enum):
         return (self.value,)
 
 
-class B(Type):
+class Arrow(Type):
     def __repr__(self):
         return "%s -> %s" % (repr(self.left), repr(self.right))
 

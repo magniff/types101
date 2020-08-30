@@ -2,7 +2,7 @@ import pytest
 
 
 from types101.ast.terms import Application, Condition, Variable, Annotation, BLiteral
-from types101.ast.types import Z, B
+from types101.ast.types import Simple, Arrow
 from types101.ast.contexts import cnil, ContextCell
 from types101.typechecker import infer
 
@@ -11,50 +11,50 @@ TYPECHECKER_CASES = [
     # Boolean literals: True
     (
         # Context doesnt matter here
-        cnil().forkwith(ContextCell(Variable("x"), ttype=Z.Boolean)),
+        cnil().forkwith(ContextCell(Variable("x"), ttype=Simple.Boolean)),
         BLiteral.T,
-        Z.Boolean,
+        Simple.Boolean,
     ),
     # Boolean literals: False
     (
         # Context doesnt matter here
-        cnil().forkwith(ContextCell(Variable("x"), ttype=Z.Boolean)),
+        cnil().forkwith(ContextCell(Variable("x"), ttype=Simple.Boolean)),
         BLiteral.F,
-        Z.Boolean,
+        Simple.Boolean,
     ),
     # Variable directly from the context provided
     (
-        cnil().forkwith(ContextCell(Variable("x"), ttype=Z.Boolean)),
+        cnil().forkwith(ContextCell(Variable("x"), ttype=Simple.Boolean)),
         Variable("x"),
-        Z.Boolean,
+        Simple.Boolean,
     ),
     # Variable annotation
     (
-        cnil().forkwith(ContextCell(Variable("x"), ttype=Z.Boolean)),
-        Annotation(Variable("x"), Z.Boolean),
-        Z.Boolean,
+        cnil().forkwith(ContextCell(Variable("x"), ttype=Simple.Boolean)),
+        Annotation(Variable("x"), Simple.Boolean),
+        Simple.Boolean,
     ),
     # Condition
     (
-        cnil().forkwith(ContextCell(Variable("x"), ttype=Z.Boolean)),
+        cnil().forkwith(ContextCell(Variable("x"), ttype=Simple.Boolean)),
         Annotation(
             Condition(
                 test=BLiteral.T,
                 yes=BLiteral.T,
                 no=BLiteral.T,
             ),
-            Z.Boolean
+            Simple.Boolean
         ),
-        Z.Boolean,
+        Simple.Boolean,
     ),
     # Application 0: return nonarrow type
     (
         cnil()
         .forkwith(
-            ContextCell(Variable("func"), ttype=B(left=Z.Boolean, right=Z.Boolean))
+            ContextCell(Variable("func"), ttype=Arrow(left=Simple.Boolean, right=Simple.Boolean))
         )
         .forkwith(
-            ContextCell(Variable("x"), ttype=Z.Boolean)
+            ContextCell(Variable("x"), ttype=Simple.Boolean)
         ),
         Annotation(
             Condition(
@@ -62,9 +62,9 @@ TYPECHECKER_CASES = [
                 yes=BLiteral.T,
                 no=Application(Variable("func"), BLiteral.T),
             ),
-            Z.Boolean
+            Simple.Boolean
         ),
-        Z.Boolean,
+        Simple.Boolean,
     ),
     # Application 1: return arrow type
     (
@@ -72,17 +72,17 @@ TYPECHECKER_CASES = [
         .forkwith(
             # func : Boolean -> (Boolean -> Boolean)
             ContextCell(Variable("func"),
-                ttype=B(
-                    left=Z.Boolean,
-                    right=B(left=Z.Boolean, right=Z.Boolean)
+                ttype=Arrow(
+                    left=Simple.Boolean,
+                    right=Arrow(left=Simple.Boolean, right=Simple.Boolean)
                 )
             )
         )
         .forkwith(
-            ContextCell(Variable("x"), ttype=Z.Boolean)
+            ContextCell(Variable("x"), ttype=Simple.Boolean)
         ),
         Application(Variable("func"), Variable("x")),
-        B(left=Z.Boolean, right=Z.Boolean)
+        Arrow(left=Simple.Boolean, right=Simple.Boolean)
     ),
 ]
 

@@ -15,12 +15,12 @@ def lookup_var(context: contexts.Context, variable: terms.Variable) -> types.Typ
 def check(context: contexts.Context, term: terms.Term, ttype: types.Type) -> bool:
     if isinstance(term, Condition):
         return (
-            check(context, term.test, types.Z.Boolean) and
+            check(context, term.test, types.Simple.Boolean) and
             check(context, term.yes, ttype) and
             check(context, term.no, ttype)
         )
     elif isinstance(term, Abstraction):
-        if not isinstance(ttype, types.B):
+        if not isinstance(ttype, types.Arrow):
             return False
         return check(
             context=context.forkwith(
@@ -35,7 +35,7 @@ def check(context: contexts.Context, term: terms.Term, ttype: types.Type) -> boo
 
 def infer(context: contexts.Context, term: terms.Term) -> types.Type:
     if term in (terms.BLiteral.T, terms.BLiteral.F):
-        return types.Z.Boolean
+        return types.Simple.Boolean
     elif isinstance(term, terms.Variable):
         return lookup_var(context, term)
     elif isinstance(term, terms.Annotation):
@@ -47,7 +47,7 @@ def infer(context: contexts.Context, term: terms.Term) -> types.Type:
         # e0 e1 or how we call it term.left term.right
         function_type = infer(context, term.left)
         # if function_type is not really a function type, then fail
-        if not isinstance(function_type, types.B):
+        if not isinstance(function_type, types.Arrow):
             raise TypingError101()
         if check(context, term.right, function_type.left):
             return function_type.right
